@@ -1,104 +1,81 @@
-# AI Native銀行カードローン申込PoC 設計ベースライン
+﻿# AI Native銀行カードローン申込PoC
 
-## 1. 現在地
+## このリポジトリについて
 
-本ディレクトリは、本格実装前の企画・設計ベースラインである。2026-07-24時点の調査では、作業場所 `C:\Users\la_sp` はGitリポジトリではなく、既存の `docs` および対象ファイルは存在しなかった。環境制約でホーム直下の全列挙はできなかったため、対象ファイルを個別確認して新規作成した。
+本リポジトリは、業務外の個人開発として開発者1名がCodexを主な作業主体に実施する技術検証である。仮想銀行、仮想商品、合成データ、APIスタブだけを使用し、実在顧客、実在銀行の非公開情報、審査情報、与信判断を扱わない。
 
-本書群は金融商品・法令・審査要件を確定するものではない。不明点は仮定または [未決事項](13_risks_and_open_questions.md) として分離した。
+本PoCは銀行向け本番システムではない。本番導入、実銀行接続、実顧客利用、法令・銀行規程への正式適合、本番認定を目的としない。公開画面にもこの制約を表示する。
 
-## 2. 文書マップ
+## 目的
+
+個人開発・Firebase Blazeプランの無料利用枠を意識した制約下で、Codexを開発主体とし、要件整理、設計、実装、テスト、文書更新、変更影響分析を一貫して行うAI Native開発方式によって、柔軟で保守しやすい銀行カードローン申込フォームのプロトタイプを構築できるか検証する。
+
+## 2段階
+
+- PoC-1: 仮想銀行1行・1商品、15〜25項目、3〜5分岐の縦切りプロトタイプを完成させる。
+- PoC-2: PoC-1の振り返り後に、商品変更、2商品目、別銀行模擬、途中保存、UX計測を追加する。
+
+## 文書マップ
 
 ```mermaid
 flowchart TD
-  CH[00 PoC憲章<br/>目的・成功仮説] --> SC[01 Scope]
-  CH --> AI[02 AI Native定義]
-  CH --> EV[10 評価計画]
-  SC --> FR[03 機能要件]
-  SC --> NFR[04 非機能要件]
-  FR --> UX[05 UX原則]
-  FR --> ARC[06 Architecture]
-  ARC --> FD[07 Form Definition]
-  ARC --> RE[08 Rule Engine]
-  AI --> WF[09 開発Workflow]
-  FD --> WF
-  RE --> WF
-  EV --> CS[11 変更Scenario]
-  WF --> CS
-  CS --> BL[12 Backlog]
-  RQ[13 Risks/Open Questions] --> BL
-  RQ --> FR
-  RQ --> NFR
+  C[00 Charter] --> S[01 Scope]
+  C --> A[02 AI Native]
+  S --> F[03 Functional]
+  S --> N[04 Non-functional]
+  F --> U[05 UX]
+  F --> R[07 Form Definition]
+  R --> E[08 Rule Engine]
+  N --> H[06 Firebase Architecture]
+  A --> W[09 Workflow]
+  W --> V[10 Evaluation]
+  V --> X[11 Scenarios]
+  X --> B[12 Backlog]
+  Q[13 Risks/Open Questions] --> B
+  H --> K[Cost Checklist]
 ```
 
-| 文書 | 正とする情報 |
+| 文書 | 内容 |
 |---|---|
-| [00_poc_charter.md](00_poc_charter.md) | 目的、仮説、成功条件、統制 |
-| [01_scope.md](01_scope.md) | PoC内外の境界 |
-| [02_ai_native_definition.md](02_ai_native_definition.md) | AI・決定的プログラム・人間の責任 |
-| [03_functional_requirements.md](03_functional_requirements.md) | 機能要件と受入条件 |
-| [04_non_functional_requirements.md](04_non_functional_requirements.md) | 非機能のPoC基準と検証 |
-| [05_ux_principles.md](05_ux_principles.md) | 離脱防止、アクセシビリティ、UX計測 |
-| [06_system_architecture.md](06_system_architecture.md) | 境界、コンポーネント、主要データ |
-| [07_form_definition.md](07_form_definition.md) | 実行可能仕様のメタモデル |
-| [08_rule_engine.md](08_rule_engine.md) | 決定的ルール、評価順、テスト |
-| [09_ai_development_workflow.md](09_ai_development_workflow.md) | 生成・検証・承認・公開フロー |
-| [10_poc_evaluation_plan.md](10_poc_evaluation_plan.md) | 指標の式、データ源、比較、記録 |
-| [11_change_scenarios.md](11_change_scenarios.md) | Scenario A〜Dの実施・計測 |
-| [12_product_backlog.md](12_product_backlog.md) | 優先順位、依存、完了条件 |
-| [13_risks_and_open_questions.md](13_risks_and_open_questions.md) | リスク、未決事項、期限目安 |
+| [00_poc_charter.md](00_poc_charter.md) | 個人開発PoCの目的と成功条件 |
+| [01_scope.md](01_scope.md) | PoC-1、PoC-2、本番化時の境界 |
+| [02_ai_native_definition.md](02_ai_native_definition.md) | Codex・決定的処理・人間の役割 |
+| [03_functional_requirements.md](03_functional_requirements.md) | 段階別の機能要件 |
+| [04_non_functional_requirements.md](04_non_functional_requirements.md) | 小規模PoCの品質・コスト要件 |
+| [05_ux_principles.md](05_ux_principles.md) | スマホ・離脱防止・簡易評価 |
+| [06_system_architecture.md](06_system_architecture.md) | Firebase中心の最小構成 |
+| [07_form_definition.md](07_form_definition.md) | JSON Schema v0の最小契約 |
+| [08_rule_engine.md](08_rule_engine.md) | 限定ルールとテスト |
+| [09_ai_development_workflow.md](09_ai_development_workflow.md) | Codex主体の10段階フロー |
+| [10_poc_evaluation_plan.md](10_poc_evaluation_plan.md) | 個人計測用KPIと記録形式 |
+| [11_change_scenarios.md](11_change_scenarios.md) | PoC-1/2の変更検証 |
+| [12_product_backlog.md](12_product_backlog.md) | 最小P0バックログ |
+| [13_risks_and_open_questions.md](13_risks_and_open_questions.md) | 個人PoC向けリスクと未決事項 |
+| [cost_checklist.md](cost_checklist.md) | Blaze利用量・予算・終了時確認 |
+| [worklogs/README.md](worklogs/README.md) | 作業時間・Codex指示・修正・テストの記録雛形 |
 
-## 3. ID体系と追跡
+## 決定事項
 
-- 目的: `OBJ-*`
-- スコープ: `SCP-*` / `OOS-*`
-- 機能・非機能: `FR-*` / `NFR-*`
-- UX・アーキテクチャ・定義・ルール: `UX-*` / `ARC-*` / `FD-*` / `RULE-*`
-- ワークフロー・シナリオ・バックログ: `WF-*` / `SC-*` / `PB-*`
-- 評価・目標: `MET-*` / `TAR-*`
-- リスク・未決: `RSK-*` / `OQ-*`
+- `bank_id`、`product_id`、`form_version` は単純な設定値として維持する。
+- フォーム定義はGitHubで版管理し、PoC-1ではビルド時に取り込む。
+- AI推論を申込実行・判定経路へ入れない。
+- ルールは限定演算子で決定的に実行し、Node.jsの自動テストでも同じ実装を使う。
+- Blazeプランを使用するが月額0円を目標とし、通常開発はEmulator Suiteで行う。
+- Firestore、Functions、Authentication等は必要性を確認してから追加する。課金可能性のある追加をCodexだけで決定しない。
+- Gitコミット、定義ハッシュ、自動テスト、簡易worklogを検証証跡とする。
 
-実装開始時は、フォーム定義の `requirement_refs`、ルールの `test_refs`、テストメタデータを使って `OBJ → FR/NFR → FD/RULE/ARC → TEST → MET` の追跡表を自動生成する。
+## Firebase料金情報
 
-## 4. 決定事項
+公式情報を2026-07-24に確認した。Blazeは従量課金で無料利用枠を含むが、超過分は課金される。予算通知は支出上限ではない。数値を使う場合は確認時点の参考値とし、コードへ固定しない。
 
-| ID | 決定 |
-|---|---|
-| DEC-01 | PoCは1銀行1商品から始め、内部キーはbank/product/form versionを必須とする |
-| DEC-02 | フォーム定義を実行可能仕様とし、公開時に解決済み不変スナップショットを作る |
-| DEC-03 | AIは開発支援に限定し、表示・必須・検証・遷移・審査判断を実行時AIへ委ねない |
-| DEC-04 | クライアント検証はUX補助、サーバーの決定的再検証を正とする |
-| DEC-05 | AI生成物は自動ゲートと変更種別に応じた人間承認なしに公開しない |
-| DEC-06 | PoCは合成データと審査APIスタブを使用し、本番認定と分離する |
-| DEC-07 | 銀行・商品差分は定義とアダプターへ局所化し、公開時に差分を解決する |
-| DEC-08 | 評価は事前登録したイベント、worklog、生成台帳、CI、欠陥台帳から再現可能に行う |
+- Firebase料金プラン: https://firebase.google.com/docs/projects/billing/firebase-pricing-plans
+- Hosting料金・利用量: https://firebase.google.com/docs/hosting/usage-quotas-pricing
+- Firestore料金: https://firebase.google.com/docs/firestore/pricing
+- Functions割当: https://firebase.google.com/docs/functions/quotas
+- Emulator Suite: https://firebase.google.com/docs/emulator-suite
+- Cloud Billing予算: https://cloud.google.com/billing/docs/how-to/budgets
 
-## 5. 主要な仮定
+## 次の最小ゴール
 
-- 仮想の標準カードローン項目で基盤設計を進められるが、正式商品要件とは扱わない。
-- PoCではYAML編集→正規化JSON公開を候補とする。
-- 保存再開、認証、同意、API契約はスタブまたは短期セッションで境界を検証する。
-- WCAG 2.2 AAを目標とするが、本番適合宣言は別工程とする。
-
-## 6. 未決事項
-
-最優先は対象商品/RACI、正式項目・ルール、審査API、同意文、データ取扱い、比較ベースライン、適用法令・セキュリティ基準である。優先度、決定者候補、期限目安は [13_risks_and_open_questions.md](13_risks_and_open_questions.md) のOQ-01〜15を参照する。
-
-## 7. 次に着手すべき作業
-
-1. PB-001〜004のDiscoveryを行い、OQ-01〜05、08、10、11を責任者と確定する。
-2. 同一の確定要件を使う評価プロトコルと従来方式の比較基準を凍結する。
-3. `schema/` にForm Definition JSON Schema v0、`examples/` に合成データの商品定義、`tests/` に検証用テストベクトルを作る。
-4. Rule DSLのADRを作成し、許可演算子、null、日付、金額、優先順位を確定する。
-5. Scenario Aの縦切りとして「開始→1セクション→分岐→確認→APIスタブ」を実装する。
-
-推奨する次のゴールは「Discovery結果と評価プロトコルを承認し、Form Definition Schema v0とRule DSL ADRを自動テスト付きで完成させる」である。本格UI実装より先に、変更容易性と統制の核を検証できる。
-
-## 8. 整合性レビュー観点
-
-- 目的OBJ-01〜06は機能・非機能・バックログ・評価指標へ紐づく。
-- AI実行責任は02、実装境界は06、公開統制は09で矛盾なく分離されている。
-- PoC対象外は01、本番追加事項は04/06に明示されている。
-- 評価指標MET-01〜11には式、ログ、比較、記録先がある。
-- Scenario A〜Dは11で個別測定され、12の実施項目へ接続されている。
-- 未確定の法令、審査、認証、セキュリティは13へ集約され、本文から参照されている。
+フォーム定義JSON Schema v0、仮想商品の15〜25項目、3〜5分岐、スマホ向け1セクション、決定的ルール、Node.js Unitテスト、ブラウザ内APIスタブを含む最小の縦切りプロトタイプをローカルで完成させる。Firebaseサービスの追加やクラウド公開は、その縦切りが動いてから行う。
 
