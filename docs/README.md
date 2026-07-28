@@ -53,11 +53,14 @@ flowchart TD
 | [13_risks_and_open_questions.md](13_risks_and_open_questions.md) | 個人PoC向けリスクと未決事項 |
 | [cost_checklist.md](cost_checklist.md) | Blaze利用量・予算・終了時確認 |
 | [worklogs/README.md](worklogs/README.md) | 作業時間・Codex指示・修正・テストの記録雛形 |
+| [../AGENTS.md](../AGENTS.md) | Codexが毎回守る永続的な作業ルール |
 
 ## 決定事項
 
 - `bank_id`、`product_id`、`form_version` は単純な設定値として維持する。
 - フォーム定義はGitHubで版管理し、PoC-1ではビルド時に取り込む。
+- 項目は `sections[].fields[]` に格納し、ルート直下に `fields` を持たない。
+- 条件ルールと名前付き項目バリデーターを分離し、任意正規表現・任意コードを許可しない。
 - AI推論を申込実行・判定経路へ入れない。
 - ルールは限定演算子で決定的に実行し、Node.jsの自動テストでも同じ実装を使う。
 - Blazeプランを使用するが月額0円を目標とし、通常開発はEmulator Suiteで行う。
@@ -77,5 +80,4 @@ flowchart TD
 
 ## 次の最小ゴール
 
-フォーム定義JSON Schema v0、仮想商品の15〜25項目、3〜5分岐、スマホ向け1セクション、決定的ルール、Node.js Unitテスト、ブラウザ内APIスタブを含む最小の縦切りプロトタイプをローカルで完成させる。Firebaseサービスの追加やクラウド公開は、その縦切りが動いてから行う。
-
+`sections[].fields[]` を採用するフォーム定義JSON Schema v0、仮想商品の代表項目、条件ルール、9種の名前付きバリデーター、required/visibility/navigation規則とNode.js Unitテストを先に作り、スマホ向け1セクションの最小縦切りへ接続する。Firebaseサービスの追加やクラウド公開は、その縦切りがローカルで動いてから行う。
