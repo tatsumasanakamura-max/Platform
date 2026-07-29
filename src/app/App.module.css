@@ -1,0 +1,53 @@
+.app {
+  min-height: 100vh;
+  background: var(--color-background);
+}
+
+.main {
+  width: min(100%, calc(var(--content-width) + 40px));
+  margin: 0 auto;
+  padding: var(--space-5) var(--space-5) calc(var(--space-10) + env(safe-area-inset-bottom));
+}
+
+.shell {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.introCard {
+  display: grid;
+  gap: var(--space-5);
+  padding: var(--space-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+}
+
+.introList {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding-left: var(--space-5);
+}
+
+.actions {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.submissionStatus {
+  margin: 0;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+@media (min-width: 700px) {
+  .main {
+    padding: var(--space-8) var(--space-8) var(--space-10);
+  }
+
+  .introCard {
+    padding: var(--space-8);
+  }
+}

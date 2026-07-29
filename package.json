@@ -1,0 +1,54 @@
+{
+  "name": "ai-native-loan-form-poc",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --write src tests scripts schema .github *.json *.ts *.js *.html *.md docs/design docs/deployment.md docs/worklogs/2026-07-29-ui-foundation.md",
+    "format:check": "prettier --check src tests scripts schema .github *.json *.ts *.js *.html *.md docs/design docs/deployment.md docs/worklogs/2026-07-29-ui-foundation.md",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/run-e2e.ps1 -Project chromium",
+    "test:e2e:webkit": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/run-e2e.ps1 -Project webkit",
+    "check:secrets": "node scripts/check-secrets.mjs",
+    "check:docs": "node scripts/check-docs.mjs",
+    "verify": "npm run typecheck && npm run lint && npm run format:check && npm run test && npm run build && npm run check:secrets && npm run check:docs"
+  },
+  "dependencies": {
+    "ajv": "8.20.0",
+    "react": "19.2.8",
+    "react-aria-components": "1.19.0",
+    "react-dom": "19.2.8",
+    "react-hook-form": "7.83.0"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.12.1",
+    "@eslint/js": "10.0.1",
+    "@playwright/test": "1.62.0",
+    "@testing-library/dom": "10.4.1",
+    "@testing-library/jest-dom": "7.0.0",
+    "@testing-library/react": "16.3.2",
+    "@testing-library/user-event": "14.6.1",
+    "@types/node": "24.13.3",
+    "@types/react": "19.2.17",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "6.0.4",
+    "axe-core": "4.12.1",
+    "eslint": "10.0.0",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "eslint-plugin-react-refresh": "0.5.3",
+    "jsdom": "29.1.1",
+    "prettier": "3.9.6",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.65.0",
+    "vite": "8.1.5",
+    "vitest": "4.1.10"
+  }
+}

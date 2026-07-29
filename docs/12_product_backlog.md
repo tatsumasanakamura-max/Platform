@@ -1,27 +1,27 @@
-﻿# プロダクトバックログ
+# プロダクトバックログ
 
 ## PoC-1 P0
 
-| ID | 項目 | 完了条件 | 目的 |
-|---|---|---|---|
-| PB1-001 | ローカル開発環境とFirebase Hosting最小設定 | ローカルbuildと必要時deploy手順 | OBJ-01 |
-| PB1-002 | JSON Schema v0 | FD-001〜008、`sections[].fields[]`、状態・遷移規則と不正例を検証 | OBJ-02,04 |
-| PB1-003 | 最小条件ルール評価 | 9演算子・4種別、required/visibility/navigation規則のUnit合格 | OBJ-03,04 |
-| PB1-004 | スマホフォームUI | 本人・勤務先・契約、確認・完了 | OBJ-01,07 |
-| PB1-005 | 仮想商品定義 | 15〜25項目、3〜5分岐 | OBJ-01,02 |
-| PB1-006 | ブラウザ/ローカルAPIスタブ | 合成結果で完了画面へ進む | OBJ-01 |
-| PB1-007 | Unit/E2E/GitHub Actions | Schema、条件ルール、validator、代表経路、build | OBJ-04 |
-| PB1-008 | Codex作業手順とworklog雛形 | AGENTS.mdと必須記録項目を利用可能 | OBJ-02,06 |
-| PB1-009 | Firebase Emulator Suite | 採用サービスをローカルで試験可能 | OBJ-01 |
-| PB1-010 | Firebase最小サービス決定 | 必要性、料金、無料枠、概算を記録 | OBJ-01 |
-| PB1-011 | Firestore Security Rules | Firestore採用時のみRulesテスト合格 | OBJ-04 |
-| PB1-012 | Functions最終検証・冪等性 | Functions採用時のみEmulatorで合格 | OBJ-04 |
-| PB1-013 | コスト運用手順 | 予算通知、利用量確認、削除手順を文書化 | OBJ-01 |
-| PB1-014 | Scenario SC1-01〜05 | 変更別KPIと回帰結果を記録 | OBJ-03,04 |
-| PB1-015 | PoC-1評価 | KPI、問題、PoC-2判断を記録 | OBJ-01〜07 |
-| PB1-016 | 名前付き項目バリデーター | 9候補、タイミング、error_code、境界テストを実装 | OBJ-02,04,07 |
+| ID      | 項目                                       | 完了条件                                                         | 目的         |
+| ------- | ------------------------------------------ | ---------------------------------------------------------------- | ------------ |
+| PB1-001 | ローカル開発環境とFirebase Hosting最小設定 | ローカルbuildと必要時deploy手順                                  | OBJ-01       |
+| PB1-002 | JSON Schema v0                             | FD-001〜008、`sections[].fields[]`、状態・遷移規則と不正例を検証 | OBJ-02,04    |
+| PB1-003 | 最小条件ルール評価                         | 9演算子・4種別、required/visibility/navigation規則のUnit合格     | OBJ-03,04    |
+| PB1-004 | スマホフォームUI                           | 本人・勤務先・契約、確認・完了                                   | OBJ-01,07    |
+| PB1-005 | 仮想商品定義                               | 15〜25項目、3〜5分岐                                             | OBJ-01,02    |
+| PB1-006 | ブラウザ/ローカルAPIスタブ                 | 合成結果で完了画面へ進む                                         | OBJ-01       |
+| PB1-007 | Unit/E2E/GitHub Actions                    | Schema、条件ルール、validator、代表経路、build                   | OBJ-04       |
+| PB1-008 | Codex作業手順とworklog雛形                 | AGENTS.mdと必須記録項目を利用可能                                | OBJ-02,06    |
+| PB1-009 | Firebase Emulator Suite                    | 採用サービスをローカルで試験可能                                 | OBJ-01       |
+| PB1-010 | Firebase最小サービス決定                   | 必要性、料金、無料枠、概算を記録                                 | OBJ-01       |
+| PB1-011 | Firestore Security Rules                   | Firestore採用時のみRulesテスト合格                               | OBJ-04       |
+| PB1-012 | Functions最終検証・冪等性                  | Functions採用時のみEmulatorで合格                                | OBJ-04       |
+| PB1-013 | コスト運用手順                             | 予算通知、利用量確認、削除手順を文書化                           | OBJ-01       |
+| PB1-014 | Scenario SC1-01〜05                        | 変更別KPIと回帰結果を記録                                        | OBJ-03,04    |
+| PB1-015 | PoC-1評価                                  | KPI、問題、PoC-2判断を記録                                       | OBJ-01〜07   |
+| PB1-016 | 名前付き項目バリデーター                   | 9候補、タイミング、error_code、境界テストを実装                  | OBJ-02,04,07 |
 
-PB1-011/012は条件付きP0であり、Firestore/Functionsを採用しなければ非該当と記録する。最初はPB1-002/003/005/016で契約を固め、PB1-004/006/007の静的縦切りを優先する。JSON Schema実ファイルと実装は次の作業で着手する。
+PB1-011/012は条件付きP0であり、Firestore/Functionsを採用しない現在の縦切りでは非該当とする。PB1-002/003/006/007/016は本人情報7項目の範囲で完了した。PB1-004/005は本人情報の縦切りまで完了し、勤務先・契約を含む15〜25項目と3〜5分岐は未完了である。次は少人数の合成データ操作確認を行い、結果を反映してから勤務先情報の最小セクションへ進む。
 
 ## PoC-2 P1
 

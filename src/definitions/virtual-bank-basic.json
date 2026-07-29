@@ -1,0 +1,125 @@
+{
+  "bank_id": "virtual-bank-calm",
+  "product_id": "virtual-card-loan-basic",
+  "form_version": "0.1.0",
+  "sections": [
+    {
+      "section_id": "personal",
+      "label": "本人情報について",
+      "description": "ご本人を確認するための基本情報です。実在する個人情報は入力しないでください。",
+      "fields": [
+        {
+          "field_id": "personal.full_name",
+          "type": "string",
+          "label": "氏名",
+          "description": "合成データの氏名を、姓と名の間に空白を入れて入力してください。",
+          "autocomplete": "off",
+          "required": true,
+          "validators": [
+            { "type": "minLength", "value": 2, "error_code": "NAME_TOO_SHORT" },
+            { "type": "maxLength", "value": 60, "error_code": "NAME_TOO_LONG" }
+          ],
+          "validation_timing": ["onBlur", "onSectionNext", "onSubmit"]
+        },
+        {
+          "field_id": "personal.name_kana",
+          "type": "string",
+          "label": "氏名（カナ）",
+          "description": "全角カタカナで入力してください。",
+          "autocomplete": "off",
+          "required": true,
+          "validators": [
+            { "type": "katakana", "error_code": "KATAKANA_INVALID" },
+            { "type": "maxLength", "value": 60, "error_code": "NAME_KANA_TOO_LONG" }
+          ],
+          "validation_timing": ["onBlur", "onSectionNext", "onSubmit"]
+        },
+        {
+          "field_id": "personal.birth_date",
+          "type": "date",
+          "label": "生年月日",
+          "description": "技術検証用の架空の日付を入力してください。",
+          "autocomplete": "off",
+          "required": true,
+          "validators": [{ "type": "date", "error_code": "DATE_INVALID" }],
+          "validation_timing": ["onSectionNext", "onSubmit"]
+        },
+        {
+          "field_id": "personal.email",
+          "type": "string",
+          "label": "メールアドレス",
+          "description": "example.invalidドメインなど、実在しない合成アドレスを使用してください。",
+          "autocomplete": "off",
+          "input_mode": "email",
+          "required": true,
+          "validators": [
+            { "type": "maxLength", "value": 254, "error_code": "EMAIL_TOO_LONG" },
+            { "type": "email", "error_code": "EMAIL_INVALID" }
+          ],
+          "validation_timing": ["onBlur", "onSectionNext", "onSubmit"]
+        },
+        {
+          "field_id": "personal.phone",
+          "type": "string",
+          "label": "電話番号",
+          "description": "ハイフンなしの10桁または11桁で、架空の番号を入力してください。",
+          "autocomplete": "off",
+          "input_mode": "tel",
+          "required": true,
+          "validators": [{ "type": "phoneJP", "error_code": "PHONE_INVALID" }],
+          "validation_timing": ["onBlur", "onSectionNext", "onSubmit"]
+        },
+        {
+          "field_id": "personal.postal_code",
+          "type": "string",
+          "label": "郵便番号",
+          "description": "ハイフンなしの7桁で、架空の郵便番号を入力してください。",
+          "autocomplete": "off",
+          "input_mode": "numeric",
+          "required": true,
+          "validators": [{ "type": "postalCodeJP", "error_code": "POSTAL_CODE_INVALID" }],
+          "validation_timing": ["onBlur", "onSectionNext", "onSubmit"]
+        },
+        {
+          "field_id": "personal.housing_type",
+          "type": "enum",
+          "label": "お住まいの形態",
+          "description": "現在の状況に近い架空の選択肢を選んでください。",
+          "required": true,
+          "validation_timing": ["onSectionNext", "onSubmit"],
+          "options": [
+            { "value": "OWN", "label": "持ち家（本人名義）" },
+            { "value": "FAMILY_OWNED", "label": "持ち家（家族名義）" },
+            { "value": "RENTAL", "label": "賃貸住宅" },
+            { "value": "OTHER", "label": "その他" }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": "confirmation",
+      "label": "入力内容の確認",
+      "fields": []
+    },
+    {
+      "section_id": "complete",
+      "label": "技術検証の完了",
+      "fields": []
+    }
+  ],
+  "rules": [],
+  "navigation": [
+    {
+      "from_section_id": "personal",
+      "default_next_section_id": "confirmation"
+    },
+    {
+      "from_section_id": "confirmation",
+      "default_next_section_id": "complete"
+    },
+    {
+      "from_section_id": "complete",
+      "terminal": true
+    }
+  ]
+}

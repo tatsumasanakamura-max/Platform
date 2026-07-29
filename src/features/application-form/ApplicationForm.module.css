@@ -1,0 +1,15 @@
+.form {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.fields {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.actions {
+  display: grid;
+  gap: var(--space-3);
+  padding-top: var(--space-2);
+}

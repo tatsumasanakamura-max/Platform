@@ -1,4 +1,4 @@
-﻿# システムアーキテクチャ
+# システムアーキテクチャ
 
 ## PoC-1推奨構成
 
@@ -16,19 +16,21 @@ flowchart LR
   EMU -.通常開発・テスト.-> FN
 ```
 
-最初は静的Webアプリ、ビルド時フォーム定義、ブラウザ内またはローカルAPIスタブだけで縦切りを完成させる。FirestoreとFunctionsは必須ではない。
+本人情報縦切りはReact 19／TypeScript strict／Vite 8の静的SPA、ビルド時フォーム定義、ブラウザ内APIスタブで実装した。フォーム状態はReact Hook Form、アクセシブルな入力動作はReact Aria Components、定義検証はAjvが担う。FirestoreとFunctionsは使用していない。
+
+ルール、名前付きバリデーター、送信対象生成はReactをimportしないTypeScriptとし、ブラウザとNode.jsテストで同じ実装を使う。`firebase.json`はHosting用SPA設定だけであり、Firebaseへは未デプロイである。
 
 ## 最小コンポーネント
 
-| ID | 要素 | 責務 |
-|---|---|---|
-| ARC-01 | GitHub | 定義、コード、テスト、文書、worklogの正 |
-| ARC-02 | Web UI | スマホ表示、入力補助、定義レンダリング |
-| ARC-03 | Form/Rule Runtime | 表示、必須、検証、遷移の決定的実行 |
-| ARC-04 | Local/Browser Stub | 実審査を行わない合成レスポンス |
-| ARC-05 | GitHub Actions | Schema、Unit、E2E、build |
-| ARC-06 | Firebase Hosting | 必要な節目だけ静的アプリを公開 |
-| ARC-07 | Emulator Suite | Firestore/Functions/Rulesの通常開発・テスト |
+| ID     | 要素               | 責務                                        |
+| ------ | ------------------ | ------------------------------------------- |
+| ARC-01 | GitHub             | 定義、コード、テスト、文書、worklogの正     |
+| ARC-02 | Web UI             | スマホ表示、入力補助、定義レンダリング      |
+| ARC-03 | Form/Rule Runtime  | 表示、必須、検証、遷移の決定的実行          |
+| ARC-04 | Local/Browser Stub | 実審査を行わない合成レスポンス              |
+| ARC-05 | GitHub Actions     | Schema、Unit、E2E、build                    |
+| ARC-06 | Firebase Hosting   | 必要な節目だけ静的アプリを公開              |
+| ARC-07 | Emulator Suite     | Firestore/Functions/Rulesの通常開発・テスト |
 
 ## オプションサービス
 
@@ -47,4 +49,4 @@ PoC-1のクライアント検証は本番セキュリティではない。本番
 
 ## デプロイ方針
 
-通常開発はローカルで行い、縦切り完成、主要変更、スマホ実機確認、最終デモのときだけFirebaseへデプロイする。課金可能性のある構成変更はCodexだけで実施しない。
+通常開発はローカルViteとPlaywrightで行う。公開は人間が承認した主要な節目だけとし、[公開前チェック](deployment.md)を満たすまでFirebaseへデプロイしない。課金可能性のある構成変更はCodexだけで実施しない。

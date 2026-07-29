@@ -1,4 +1,4 @@
-﻿# AI Native銀行カードローン申込PoC
+# AI Native銀行カードローン申込PoC
 
 ## このリポジトリについて
 
@@ -24,6 +24,7 @@ flowchart TD
   S --> F[03 Functional]
   S --> N[04 Non-functional]
   F --> U[05 UX]
+  U --> D[Design System]
   F --> R[07 Form Definition]
   R --> E[08 Rule Engine]
   N --> H[06 Firebase Architecture]
@@ -35,25 +36,30 @@ flowchart TD
   H --> K[Cost Checklist]
 ```
 
-| 文書 | 内容 |
-|---|---|
-| [00_poc_charter.md](00_poc_charter.md) | 個人開発PoCの目的と成功条件 |
-| [01_scope.md](01_scope.md) | PoC-1、PoC-2、本番化時の境界 |
-| [02_ai_native_definition.md](02_ai_native_definition.md) | Codex・決定的処理・人間の役割 |
-| [03_functional_requirements.md](03_functional_requirements.md) | 段階別の機能要件 |
-| [04_non_functional_requirements.md](04_non_functional_requirements.md) | 小規模PoCの品質・コスト要件 |
-| [05_ux_principles.md](05_ux_principles.md) | スマホ・離脱防止・簡易評価 |
-| [06_system_architecture.md](06_system_architecture.md) | Firebase中心の最小構成 |
-| [07_form_definition.md](07_form_definition.md) | JSON Schema v0の最小契約 |
-| [08_rule_engine.md](08_rule_engine.md) | 限定ルールとテスト |
-| [09_ai_development_workflow.md](09_ai_development_workflow.md) | Codex主体の10段階フロー |
-| [10_poc_evaluation_plan.md](10_poc_evaluation_plan.md) | 個人計測用KPIと記録形式 |
-| [11_change_scenarios.md](11_change_scenarios.md) | PoC-1/2の変更検証 |
-| [12_product_backlog.md](12_product_backlog.md) | 最小P0バックログ |
-| [13_risks_and_open_questions.md](13_risks_and_open_questions.md) | 個人PoC向けリスクと未決事項 |
-| [cost_checklist.md](cost_checklist.md) | Blaze利用量・予算・終了時確認 |
-| [worklogs/README.md](worklogs/README.md) | 作業時間・Codex指示・修正・テストの記録雛形 |
-| [../AGENTS.md](../AGENTS.md) | Codexが毎回守る永続的な作業ルール |
+| 文書                                                                   | 内容                                        |
+| ---------------------------------------------------------------------- | ------------------------------------------- |
+| [00_poc_charter.md](00_poc_charter.md)                                 | 個人開発PoCの目的と成功条件                 |
+| [01_scope.md](01_scope.md)                                             | PoC-1、PoC-2、本番化時の境界                |
+| [02_ai_native_definition.md](02_ai_native_definition.md)               | Codex・決定的処理・人間の役割               |
+| [03_functional_requirements.md](03_functional_requirements.md)         | 段階別の機能要件                            |
+| [04_non_functional_requirements.md](04_non_functional_requirements.md) | 小規模PoCの品質・コスト要件                 |
+| [05_ux_principles.md](05_ux_principles.md)                             | スマホ・離脱防止・簡易評価                  |
+| [06_system_architecture.md](06_system_architecture.md)                 | Firebase中心の最小構成                      |
+| [07_form_definition.md](07_form_definition.md)                         | JSON Schema v0の最小契約                    |
+| [08_rule_engine.md](08_rule_engine.md)                                 | 限定ルールとテスト                          |
+| [09_ai_development_workflow.md](09_ai_development_workflow.md)         | Codex主体の10段階フロー                     |
+| [10_poc_evaluation_plan.md](10_poc_evaluation_plan.md)                 | 個人計測用KPIと記録形式                     |
+| [11_change_scenarios.md](11_change_scenarios.md)                       | PoC-1/2の変更検証                           |
+| [12_product_backlog.md](12_product_backlog.md)                         | 最小P0バックログ                            |
+| [13_risks_and_open_questions.md](13_risks_and_open_questions.md)       | 個人PoC向けリスクと未決事項                 |
+| [cost_checklist.md](cost_checklist.md)                                 | Blaze利用量・予算・終了時確認               |
+| [design/principles.md](design/principles.md)                           | Calm TrustとUI/UX設計原則                   |
+| [design/components.md](design/components.md)                           | 正式UI部品の状態・アクセシビリティ契約      |
+| [design/accessibility.md](design/accessibility.md)                     | WCAG 2.2 AA目標と手動確認                   |
+| [design/references.md](design/references.md)                           | 公式デザイン原則の参照記録                  |
+| [deployment.md](deployment.md)                                         | Firebase Hosting公開前チェックと手順        |
+| [worklogs/README.md](worklogs/README.md)                               | 作業時間・Codex指示・修正・テストの記録雛形 |
+| [../AGENTS.md](../AGENTS.md)                                           | Codexが毎回守る永続的な作業ルール           |
 
 ## 決定事項
 
@@ -66,6 +72,8 @@ flowchart TD
 - Blazeプランを使用するが月額0円を目標とし、通常開発はEmulator Suiteで行う。
 - Firestore、Functions、Authentication等は必要性を確認してから追加する。課金可能性のある追加をCodexだけで決定しない。
 - Gitコミット、定義ハッシュ、自動テスト、簡易worklogを検証証跡とする。
+- UI基盤はReact 19、TypeScript strict、Vite 8、React Hook Form、React Aria Components、CSS Modulesを使用する。
+- 最初の本人情報7項目はフォーム定義から動的描画し、Firestore、Functions、Authenticationは使用しない。
 
 ## Firebase料金情報
 
@@ -80,4 +88,4 @@ flowchart TD
 
 ## 次の最小ゴール
 
-`sections[].fields[]` を採用するフォーム定義JSON Schema v0、仮想商品の代表項目、条件ルール、9種の名前付きバリデーター、required/visibility/navigation規則とNode.js Unitテストを先に作り、スマホ向け1セクションの最小縦切りへ接続する。Firebaseサービスの追加やクラウド公開は、その縦切りがローカルで動いてから行う。
+本人情報7項目の縦切りを少人数・合成データで操作確認し、エラー文、入力負荷、完了時間、迷った箇所を記録する。結果を反映してから、同じ定義・部品契約で勤務先情報の最小セクションを追加する。Firebaseへの公開やPoC-2機能はまだ開始しない。

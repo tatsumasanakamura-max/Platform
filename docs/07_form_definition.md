@@ -1,4 +1,4 @@
-﻿# フォーム定義
+# フォーム定義
 
 ## 目的
 
@@ -19,15 +19,15 @@ form
 └─ navigation[]
 ```
 
-| ID | 属性 | 内容 |
-|---|---|---|
-| FD-001 | `bank_id` | 仮想銀行ID |
-| FD-002 | `product_id` | 仮想商品ID |
-| FD-003 | `form_version` | 変更を識別する版 |
-| FD-004 | `sections[]` | セクションID、表示名、順序、配下の項目 |
+| ID     | 属性                  | 内容                                                   |
+| ------ | --------------------- | ------------------------------------------------------ |
+| FD-001 | `bank_id`             | 仮想銀行ID                                             |
+| FD-002 | `product_id`          | 仮想商品ID                                             |
+| FD-003 | `form_version`        | 変更を識別する版                                       |
+| FD-004 | `sections[]`          | セクションID、表示名、順序、配下の項目                 |
 | FD-005 | `sections[].fields[]` | 型、表示名、固定状態、ルール参照、選択肢、バリデーター |
-| FD-006 | `rules[]` | visibility/required/validation/navigation の条件ルール |
-| FD-007 | `navigation[]` | 基本遷移と条件付きnavigationルール参照 |
+| FD-006 | `rules[]`             | visibility/required/validation/navigation の条件ルール |
+| FD-007 | `navigation[]`        | 基本遷移と条件付きnavigationルール参照                 |
 
 `status`、`brand_ref`、`consents`、外部`mappings`、詳細`traceability` はPoC-1の必須にしない。ブランド文言は単純な設定として持ち、正式同意文として扱わない。
 
@@ -86,23 +86,23 @@ effective_required =
   )
 ```
 
-条件変更で非表示になった項目は送信対象から必ず除外する。画面内の値はセクション滞在中だけ保持してよい。再表示時に値を保持するか消去するかはPoC-1実装前に一方へ固定する（OQ-11）。
+条件変更で非表示になった項目はReact Hook Formから登録解除し、値を消去して送信対象から除外する。通常の画面戻りと確認画面からの修正では表示項目の値を保持する。この方針をPoC-1のOQ-11決定とする。
 
 ## 名前付き項目バリデーター
 
 単項目の形式、長さ、数値範囲は条件ルールではなく `validators` で表す。PoC-1で許可する候補は次のとおりで、`required` は含めない。
 
-| type | 用途 |
-|---|---|
-| `minLength` | 最小文字数 |
-| `maxLength` | 最大文字数 |
-| `minValue` | 数値の最小値 |
-| `maxValue` | 数値の最大値 |
-| `email` | メールアドレス形式 |
+| type           | 用途               |
+| -------------- | ------------------ |
+| `minLength`    | 最小文字数         |
+| `maxLength`    | 最大文字数         |
+| `minValue`     | 数値の最小値       |
+| `maxValue`     | 数値の最大値       |
+| `email`        | メールアドレス形式 |
 | `postalCodeJP` | 日本の郵便番号形式 |
-| `phoneJP` | 日本の電話番号形式 |
-| `katakana` | カタカナ形式 |
-| `date` | 日付形式・実在日付 |
+| `phoneJP`      | 日本の電話番号形式 |
+| `katakana`     | カタカナ形式       |
+| `date`         | 日付形式・実在日付 |
 
 フォーム定義に任意正規表現、JavaScript式、任意コードを記載できない。バリデーターは表示文ではなく `error_code` を返し、UIは単純なエラーメッセージ定義から文面を解決する。大規模な多言語基盤は作らない。
 
@@ -134,16 +134,16 @@ PoC-1では同一セクションで複数navigationルールが同時成立す�
 
 ## Schema・静的検証
 
-| ID | 検証 |
-|---|---|
-| FDV-001 | 必須属性、型、許可値、`sections[].fields[]` 以外の項目配列禁止 |
-| FDV-002 | ID一意性と参照先の存在 |
+| ID      | 検証                                                             |
+| ------- | ---------------------------------------------------------------- |
+| FDV-001 | 必須属性、型、許可値、`sections[].fields[]` 以外の項目配列禁止   |
+| FDV-002 | ID一意性と参照先の存在                                           |
 | FDV-003 | 許可された条件演算子、ルール種別、名前付きバリデーターだけを使用 |
-| FDV-004 | 遷移先の存在、到達不能セクション、意図しない循環 |
-| FDV-005 | navigationルールの同時成立可能性、既定遷移または終端の存在 |
-| FDV-006 | visible/requiredの参照と型、非表示項目を必須にしない評価 |
-| FDV-007 | validatorの引数、error_code、validation_timing |
-| FDV-008 | 15〜25項目、3〜5分岐というPoC-1上限の警告 |
+| FDV-004 | 遷移先の存在、到達不能セクション、意図しない循環                 |
+| FDV-005 | navigationルールの同時成立可能性、既定遷移または終端の存在       |
+| FDV-006 | visible/requiredの参照と型、非表示項目を必須にしない評価         |
+| FDV-007 | validatorの引数、error_code、validation_timing                   |
+| FDV-008 | 15〜25項目、3〜5分岐というPoC-1上限の警告                        |
 
 ## 版管理
 

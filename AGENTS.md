@@ -43,7 +43,23 @@
 - secret scan
 - 文書リンク・ID整合性
 
-TODO: 技術スタック確定後、リポジトリで実行可能な正確なコマンドを追記する。
+## 検証コマンド
+
+Node.js 24とnpmを使用する。依存関係は`package-lock.json`から復元し、テスト未実行時は成功と報告しない。
+
+- 依存関係: `npm ci`
+- TypeScript strict: `npm run typecheck`
+- lint: `npm run lint`
+- format確認: `npm run format:check`
+- JSON Schema／ルール／バリデーター／Component: `npm test`
+- Chromium E2E／axe／モバイル幅: `npm run test:e2e`
+- WebKit iPhone相当: `npm run test:e2e:webkit`
+- production build: `npm run build`
+- secret scan: `npm run check:secrets`
+- 文書リンク整合性: `npm run check:docs`
+- E2E以外の一括ゲート: `npm run verify`
+
+初回E2E前は、公式手順を確認して`npx playwright install chromium webkit`を実行する。Firebase CLIは未導入であり、デプロイコマンドは人間が公開を承認した後に追記する。
 
 ## 参照文書
 
