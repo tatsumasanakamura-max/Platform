@@ -51,11 +51,11 @@ describe('accessible field components', () => {
 
   it('moves focus from an error summary to the matching field', async () => {
     const user = userEvent.setup();
-    render(
+    const { rerender } = render(
       <>
         <ErrorSummary
           errors={[{ fieldId: 'email', message: 'メールを確認してください' }]}
-          shouldFocus
+          focusRequestId={1}
         />
         <label>
           メール
@@ -65,6 +65,20 @@ describe('accessible field components', () => {
     );
     expect(screen.getByRole('alert')).toHaveFocus();
     await user.click(screen.getByRole('button', { name: 'メールを確認してください' }));
+    expect(screen.getByRole('textbox', { name: 'メール' })).toHaveFocus();
+
+    rerender(
+      <>
+        <ErrorSummary
+          errors={[{ fieldId: 'email', message: 'メール形式を確認してください' }]}
+          focusRequestId={1}
+        />
+        <label>
+          メール
+          <input name="email" />
+        </label>
+      </>,
+    );
     expect(screen.getByRole('textbox', { name: 'メール' })).toHaveFocus();
   });
 

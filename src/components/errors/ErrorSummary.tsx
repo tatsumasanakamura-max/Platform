@@ -8,16 +8,24 @@ export interface SummaryError {
 
 export function ErrorSummary({
   errors,
-  shouldFocus = false,
+  focusRequestId = 0,
 }: {
   errors: SummaryError[];
-  shouldFocus?: boolean;
+  focusRequestId?: number;
 }) {
   const summaryRef = useRef<HTMLDivElement>(null);
+  const handledFocusRequestRef = useRef(0);
 
   useEffect(() => {
-    if (shouldFocus && errors.length > 0) summaryRef.current?.focus();
-  }, [errors, shouldFocus]);
+    if (
+      focusRequestId > 0 &&
+      focusRequestId !== handledFocusRequestRef.current &&
+      errors.length > 0
+    ) {
+      handledFocusRequestRef.current = focusRequestId;
+      summaryRef.current?.focus();
+    }
+  }, [errors, focusRequestId]);
 
   if (errors.length === 0) return null;
 

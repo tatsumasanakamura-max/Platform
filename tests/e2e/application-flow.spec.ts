@@ -40,7 +40,10 @@ test('required errors appear in summary and can be corrected', async ({ page }) 
   await expect(summary).toBeFocused();
   await expect(summary.getByRole('button')).toHaveCount(7);
   await summary.getByRole('button', { name: '氏名を入力してください', exact: true }).click();
-  await expect(page.getByRole('textbox', { name: '氏名', exact: true })).toBeFocused();
+  const name = page.getByRole('textbox', { name: '氏名', exact: true });
+  await expect(name).toBeFocused();
+  await name.type('サ');
+  await expect(name).toBeFocused();
   await fillValidPersonalData(page);
   await page.getByRole('button', { name: '入力内容を確認する' }).click();
   await expect(page.getByRole('heading', { name: '入力内容を確認してください' })).toBeVisible();

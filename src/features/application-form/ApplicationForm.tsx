@@ -70,7 +70,7 @@ export function ApplicationForm({ definition, form, onValid, onBack }: Applicati
       <SectionHeading title={section.label} description={section.description} />
       <ErrorSummary
         errors={form.formState.submitCount > 0 ? summaryErrors : []}
-        shouldFocus={form.formState.submitCount > 0}
+        focusRequestId={form.formState.submitCount}
       />
 
       <div className={styles.fields}>

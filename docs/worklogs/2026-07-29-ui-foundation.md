@@ -35,6 +35,7 @@
 
 - `npm run verify`: TypeScript strict、lint、format、Vitest 41件、build、secret scan、文書リンク検査がすべて成功。
 - `npm run test:e2e`: Chromium 7件成功。正常完了、必須修正、メール／郵便番号、戻る保持、キーボード、axe、320／390px、200%視覚拡大を確認。
+- フォーカス回帰確認: ErrorSummaryから氏名欄へ移動して1文字入力後も、フォーカスが入力欄に残ることをComponent、Chromium E2E、実ブラウザで確認。
 - `npm run test:e2e:webkit`: Chromium／iPhone相当WebKit計13件成功。WebKitの主要6経路を確認。
 - axe-core: critical／serious違反0。これはWCAG適合宣言ではない。
 - 実ブラウザ目視: 390×844の開始／入力／エラー、1280×800の開始画面を確認。情報階層、余白、フォーカス、長い日本語、ボタン優先順位、横スクロールなしを確認。
@@ -47,6 +48,7 @@
 - Ajv strictモードでJSON Schemaのunion型許可を明示した。
 - 最初のComponentテストでエラー文が入力へ関連付かなかったため、React AriaのerrorMessage slotへ修正した。
 - 実ブラウザで、必須エラーが同文で識別しにくく、onBlur時にErrorSummaryへフォーカスが移る問題を発見した。項目名を含む文面へ変更し、概要フォーカスはセクション移動検証時だけに限定した。
+- 上記フォーカス制御は、エラー配列が入力ごとに再生成されるため再発した。送信回数をフォーカス要求IDとして扱い、同じ送信要求ではErrorSummaryへ一度だけフォーカスする実装へ修正した。
 - 戻る操作と非表示項目解除の責務を分け、通常の画面戻りでは回答を保持し、条件で非表示になった項目だけ登録解除する方針へ修正した。
 
 ## 次回改善点
