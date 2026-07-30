@@ -48,3 +48,13 @@ flowchart LR
   E --> F[PoC-1評価]
   F -->|進む場合| G[PoC-2]
 ```
+
+## PoC-1B
+
+- PB1B-001: FormStudioの3ペイン／狭幅タブUI
+- PB1B-002: Draft編集、履歴、Import/Export、localStorage
+- PB1B-003: 共通Runtime Preview、validator test、最小条件builder
+- PB1B-004: Schema・整合性、属性単位差分、派生Markdown
+- PB1B-005: Unit/Component/E2E、axe、実ブラウザ視覚確認
+
+正となる完了範囲は[Studio概要](form-studio/overview.md)を参照する。

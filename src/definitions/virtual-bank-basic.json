@@ -16,10 +16,24 @@
           "autocomplete": "off",
           "required": true,
           "validators": [
-            { "type": "minLength", "value": 2, "error_code": "NAME_TOO_SHORT" },
-            { "type": "maxLength", "value": 60, "error_code": "NAME_TOO_LONG" }
+            {
+              "type": "minLength",
+              "value": 2,
+              "error_code": "NAME_TOO_SHORT",
+              "message": "氏名は2文字以上で入力してください"
+            },
+            {
+              "type": "maxLength",
+              "value": 60,
+              "error_code": "NAME_TOO_LONG",
+              "message": "氏名は60文字以内で入力してください"
+            }
           ],
-          "validation_timing": ["onBlur", "onSectionNext", "onSubmit"]
+          "validation_timing": ["onBlur", "onSectionNext", "onSubmit"],
+          "help_text": "合成データの氏名を、姓と名の間に空白を入れて入力してください。",
+          "ui_type": "text",
+          "placeholder": "例：架空 太郎",
+          "example": "架空 太郎"
         },
         {
           "field_id": "personal.name_kana",
@@ -29,10 +43,22 @@
           "autocomplete": "off",
           "required": true,
           "validators": [
-            { "type": "katakana", "error_code": "KATAKANA_INVALID" },
-            { "type": "maxLength", "value": 60, "error_code": "NAME_KANA_TOO_LONG" }
+            {
+              "type": "katakana",
+              "error_code": "KATAKANA_INVALID",
+              "message": "氏名（カナ）は全角カタカナで入力してください"
+            },
+            {
+              "type": "maxLength",
+              "value": 60,
+              "error_code": "NAME_KANA_TOO_LONG",
+              "message": "氏名（カナ）は60文字以内で入力してください"
+            }
           ],
-          "validation_timing": ["onBlur", "onSectionNext", "onSubmit"]
+          "validation_timing": ["onBlur", "onSectionNext", "onSubmit"],
+          "help_text": "全角カタカナで入力してください。",
+          "ui_type": "text",
+          "placeholder": "例：カクウ タロウ"
         },
         {
           "field_id": "personal.birth_date",
@@ -41,8 +67,16 @@
           "description": "技術検証用の架空の日付を入力してください。",
           "autocomplete": "off",
           "required": true,
-          "validators": [{ "type": "date", "error_code": "DATE_INVALID" }],
-          "validation_timing": ["onSectionNext", "onSubmit"]
+          "validators": [
+            {
+              "type": "date",
+              "error_code": "DATE_INVALID",
+              "message": "実在する形式の日付を入力してください"
+            }
+          ],
+          "validation_timing": ["onSectionNext", "onSubmit"],
+          "help_text": "技術検証用の架空の日付を入力してください。",
+          "ui_type": "date"
         },
         {
           "field_id": "personal.email",
@@ -53,10 +87,22 @@
           "input_mode": "email",
           "required": true,
           "validators": [
-            { "type": "maxLength", "value": 254, "error_code": "EMAIL_TOO_LONG" },
-            { "type": "email", "error_code": "EMAIL_INVALID" }
+            {
+              "type": "maxLength",
+              "value": 254,
+              "error_code": "EMAIL_TOO_LONG",
+              "message": "メールアドレスは254文字以内で入力してください"
+            },
+            {
+              "type": "email",
+              "error_code": "EMAIL_INVALID",
+              "message": "メールアドレスを正しい形式で入力してください"
+            }
           ],
-          "validation_timing": ["onBlur", "onSectionNext", "onSubmit"]
+          "validation_timing": ["onBlur", "onSectionNext", "onSubmit"],
+          "help_text": "example.invalidドメインなど、実在しない合成アドレスを使用してください。",
+          "ui_type": "email",
+          "placeholder": "demo@example.invalid"
         },
         {
           "field_id": "personal.phone",
@@ -66,8 +112,17 @@
           "autocomplete": "off",
           "input_mode": "tel",
           "required": true,
-          "validators": [{ "type": "phoneJP", "error_code": "PHONE_INVALID" }],
-          "validation_timing": ["onBlur", "onSectionNext", "onSubmit"]
+          "validators": [
+            {
+              "type": "phoneJP",
+              "error_code": "PHONE_INVALID",
+              "message": "電話番号はハイフンなしの10桁または11桁で入力してください"
+            }
+          ],
+          "validation_timing": ["onBlur", "onSectionNext", "onSubmit"],
+          "help_text": "ハイフンなしの10桁または11桁で、架空の番号を入力してください。",
+          "ui_type": "tel",
+          "placeholder": "0312345678"
         },
         {
           "field_id": "personal.postal_code",
@@ -77,8 +132,17 @@
           "autocomplete": "off",
           "input_mode": "numeric",
           "required": true,
-          "validators": [{ "type": "postalCodeJP", "error_code": "POSTAL_CODE_INVALID" }],
-          "validation_timing": ["onBlur", "onSectionNext", "onSubmit"]
+          "validators": [
+            {
+              "type": "postalCodeJP",
+              "error_code": "POSTAL_CODE_INVALID",
+              "message": "郵便番号はハイフンなしの7桁で入力してください"
+            }
+          ],
+          "validation_timing": ["onBlur", "onSectionNext", "onSubmit"],
+          "help_text": "ハイフンなしの7桁で、架空の郵便番号を入力してください。",
+          "ui_type": "text",
+          "placeholder": "0000000"
         },
         {
           "field_id": "personal.housing_type",
@@ -88,11 +152,32 @@
           "required": true,
           "validation_timing": ["onSectionNext", "onSubmit"],
           "options": [
-            { "value": "OWN", "label": "持ち家（本人名義）" },
-            { "value": "FAMILY_OWNED", "label": "持ち家（家族名義）" },
-            { "value": "RENTAL", "label": "賃貸住宅" },
-            { "value": "OTHER", "label": "その他" }
-          ]
+            {
+              "value": "OWN",
+              "label": "持ち家（本人名義）"
+            },
+            {
+              "value": "FAMILY_OWNED",
+              "label": "持ち家（家族名義）"
+            },
+            {
+              "value": "RENTAL",
+              "label": "賃貸住宅"
+            },
+            {
+              "value": "OTHER",
+              "label": "その他"
+            }
+          ],
+          "help_text": "現在の状況に近い架空の選択肢を選んでください。",
+          "ui_type": "radio"
+        }
+      ],
+      "groups": [
+        {
+          "group_id": "personal.contact",
+          "label": "連絡先",
+          "field_ids": ["personal.email", "personal.phone"]
         }
       ]
     },
@@ -120,6 +205,44 @@
     {
       "from_section_id": "complete",
       "terminal": true
+    }
+  ],
+  "scenarios": [
+    {
+      "scenario_id": "SCENARIO-BASIC",
+      "name": "基本入力",
+      "answers": {
+        "personal.housing_type": "RENTAL"
+      },
+      "expected": {
+        "visible_field_ids": [
+          "personal.full_name",
+          "personal.name_kana",
+          "personal.birth_date",
+          "personal.email",
+          "personal.phone",
+          "personal.postal_code",
+          "personal.housing_type"
+        ]
+      }
+    },
+    {
+      "scenario_id": "SCENARIO-OWNER",
+      "name": "持ち家",
+      "answers": {
+        "personal.housing_type": "OWN"
+      },
+      "expected": {
+        "visible_field_ids": [
+          "personal.full_name",
+          "personal.name_kana",
+          "personal.birth_date",
+          "personal.email",
+          "personal.phone",
+          "personal.postal_code",
+          "personal.housing_type"
+        ]
+      }
     }
   ]
 }

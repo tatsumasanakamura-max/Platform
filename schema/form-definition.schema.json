@@ -6,22 +6,50 @@
   "additionalProperties": false,
   "required": ["bank_id", "product_id", "form_version", "sections", "rules", "navigation"],
   "properties": {
-    "bank_id": { "type": "string", "minLength": 1 },
-    "product_id": { "type": "string", "minLength": 1 },
-    "form_version": { "type": "string", "minLength": 1 },
+    "bank_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "product_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "form_version": {
+      "type": "string",
+      "minLength": 1
+    },
     "sections": {
       "type": "array",
       "minItems": 1,
-      "items": { "$ref": "#/$defs/section" }
+      "items": {
+        "$ref": "#/$defs/section"
+      }
     },
     "rules": {
       "type": "array",
-      "items": { "$ref": "#/$defs/rule" }
+      "items": {
+        "$ref": "#/$defs/rule"
+      }
     },
     "navigation": {
       "type": "array",
       "minItems": 1,
-      "items": { "$ref": "#/$defs/navigation" }
+      "items": {
+        "$ref": "#/$defs/navigation"
+      }
+    },
+    "scenarios": {
+      "type": "array",
+      "maxItems": 2,
+      "items": {
+        "$ref": "#/$defs/scenario"
+      }
+    },
+    "open_questions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
     }
   },
   "$defs": {
@@ -30,12 +58,28 @@
       "additionalProperties": false,
       "required": ["section_id", "label", "fields"],
       "properties": {
-        "section_id": { "type": "string", "minLength": 1 },
-        "label": { "type": "string", "minLength": 1 },
-        "description": { "type": "string" },
+        "section_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string"
+        },
+        "groups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/group"
+          }
+        },
         "fields": {
           "type": "array",
-          "items": { "$ref": "#/$defs/field" }
+          "items": {
+            "$ref": "#/$defs/field"
+          }
         }
       }
     },
@@ -44,30 +88,80 @@
       "additionalProperties": false,
       "required": ["field_id", "type", "label", "required"],
       "properties": {
-        "field_id": { "type": "string", "minLength": 1 },
+        "field_id": {
+          "type": "string",
+          "minLength": 1
+        },
         "type": {
           "enum": ["string", "integer", "decimal", "boolean", "date", "enum"]
         },
-        "label": { "type": "string", "minLength": 1 },
-        "description": { "type": "string" },
-        "autocomplete": { "type": "string" },
-        "input_mode": { "enum": ["text", "email", "tel", "numeric", "decimal"] },
-        "required": { "type": "boolean" },
-        "visible": { "type": "boolean" },
-        "required_rule_id": { "type": "string", "minLength": 1 },
-        "visibility_rule_id": { "type": "string", "minLength": 1 },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ui_type": {
+          "enum": ["text", "email", "tel", "number", "date", "radio", "select", "checkbox"]
+        },
+        "description": {
+          "type": "string"
+        },
+        "autocomplete": {
+          "type": "string"
+        },
+        "placeholder": {
+          "type": "string"
+        },
+        "example": {
+          "type": "string"
+        },
+        "help_text": {
+          "type": "string"
+        },
+        "unit": {
+          "type": "string"
+        },
+        "supplemental_text": {
+          "type": "string"
+        },
+        "input_mode": {
+          "enum": ["text", "email", "tel", "numeric", "decimal"]
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "visible": {
+          "type": "boolean"
+        },
+        "default_value": {
+          "type": ["string", "number", "boolean", "null"]
+        },
+        "required_rule_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "visibility_rule_id": {
+          "type": "string",
+          "minLength": 1
+        },
         "validation_rule_ids": {
           "type": "array",
-          "items": { "type": "string", "minLength": 1 },
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
           "uniqueItems": true
         },
         "validators": {
           "type": "array",
-          "items": { "$ref": "#/$defs/validator" }
+          "items": {
+            "$ref": "#/$defs/validator"
+          }
         },
         "validation_timing": {
           "type": "array",
-          "items": { "enum": ["onBlur", "onSectionNext", "onSubmit"] },
+          "items": {
+            "enum": ["onBlur", "onSectionNext", "onSubmit"]
+          },
           "uniqueItems": true
         },
         "options": {
@@ -77,8 +171,12 @@
             "additionalProperties": false,
             "required": ["value", "label"],
             "properties": {
-              "value": { "type": "string" },
-              "label": { "type": "string" }
+              "value": {
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              }
             }
           }
         }
@@ -102,17 +200,32 @@
             "date"
           ]
         },
-        "value": { "type": "number" },
-        "error_code": { "type": "string", "minLength": 1 }
+        "value": {
+          "type": "number"
+        },
+        "error_code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "message": {
+          "type": "string"
+        }
       },
       "allOf": [
         {
           "if": {
             "properties": {
-              "type": { "enum": ["minLength", "maxLength", "minValue", "maxValue"] }
+              "type": {
+                "enum": ["minLength", "maxLength", "minValue", "maxValue"]
+              }
             }
           },
-          "then": { "properties": { "value": {} }, "required": ["value"] }
+          "then": {
+            "properties": {
+              "value": {}
+            },
+            "required": ["value"]
+          }
         }
       ]
     },
@@ -133,13 +246,20 @@
                 "lessThanOrEqual"
               ]
             },
-            "field": { "type": "string", "minLength": 1 },
+            "field": {
+              "type": "string",
+              "minLength": 1
+            },
             "value": {
               "oneOf": [
-                { "type": ["string", "number", "boolean", "null"] },
+                {
+                  "type": ["string", "number", "boolean", "null"]
+                },
                 {
                   "type": "array",
-                  "items": { "type": ["string", "number", "boolean", "null"] }
+                  "items": {
+                    "type": ["string", "number", "boolean", "null"]
+                  }
                 }
               ]
             }
@@ -150,11 +270,15 @@
           "additionalProperties": false,
           "required": ["op", "conditions"],
           "properties": {
-            "op": { "enum": ["and", "or"] },
+            "op": {
+              "enum": ["and", "or"]
+            },
             "conditions": {
               "type": "array",
               "minItems": 1,
-              "items": { "$ref": "#/$defs/condition" }
+              "items": {
+                "$ref": "#/$defs/condition"
+              }
             }
           }
         },
@@ -163,8 +287,12 @@
           "additionalProperties": false,
           "required": ["op", "condition"],
           "properties": {
-            "op": { "const": "not" },
-            "condition": { "$ref": "#/$defs/condition" }
+            "op": {
+              "const": "not"
+            },
+            "condition": {
+              "$ref": "#/$defs/condition"
+            }
           }
         }
       ]
@@ -174,16 +302,29 @@
       "additionalProperties": false,
       "required": ["rule_id", "type", "condition"],
       "properties": {
-        "rule_id": { "type": "string", "minLength": 1 },
-        "type": { "enum": ["visibility", "required", "validation", "navigation"] },
-        "condition": { "$ref": "#/$defs/condition" },
+        "rule_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "enum": ["visibility", "required", "validation", "navigation"]
+        },
+        "condition": {
+          "$ref": "#/$defs/condition"
+        },
         "result": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "value": { "type": "boolean" },
-            "error_code": { "type": "string" },
-            "next_section_id": { "type": "string" }
+            "value": {
+              "type": "boolean"
+            },
+            "error_code": {
+              "type": "string"
+            },
+            "next_section_id": {
+              "type": "string"
+            }
           }
         }
       }
@@ -193,14 +334,83 @@
       "additionalProperties": false,
       "required": ["from_section_id"],
       "properties": {
-        "from_section_id": { "type": "string", "minLength": 1 },
-        "default_next_section_id": { "type": "string", "minLength": 1 },
+        "from_section_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "default_next_section_id": {
+          "type": "string",
+          "minLength": 1
+        },
         "navigation_rule_ids": {
           "type": "array",
-          "items": { "type": "string", "minLength": 1 },
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
           "uniqueItems": true
         },
-        "terminal": { "type": "boolean" }
+        "terminal": {
+          "type": "boolean"
+        }
+      }
+    },
+    "scenario": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scenario_id", "name", "answers"],
+      "properties": {
+        "scenario_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "answers": {
+          "type": "object",
+          "additionalProperties": {
+            "type": ["string", "number", "boolean", "null"]
+          }
+        },
+        "expected": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "visible_field_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            }
+          }
+        }
+      }
+    },
+    "group": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["group_id", "label", "field_ids"],
+      "properties": {
+        "group_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "field_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
       }
     }
   }

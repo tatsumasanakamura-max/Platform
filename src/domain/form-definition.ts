@@ -54,10 +54,22 @@ export interface ValidatorDefinition {
   type: ValidatorType;
   value?: number;
   error_code: string;
+  message?: string;
 }
 
 export type ValidationTiming = 'onBlur' | 'onSectionNext' | 'onSubmit';
 export type FieldType = 'string' | 'integer' | 'decimal' | 'boolean' | 'date' | 'enum';
+export const fieldControlTypes = [
+  'text',
+  'email',
+  'tel',
+  'number',
+  'date',
+  'radio',
+  'select',
+  'checkbox',
+] as const;
+export type FieldControlType = (typeof fieldControlTypes)[number];
 
 export interface FieldOption {
   value: string;
@@ -67,8 +79,15 @@ export interface FieldOption {
 export interface FieldDefinition {
   field_id: string;
   type: FieldType;
+  ui_type?: FieldControlType;
   label: string;
   description?: string;
+  placeholder?: string;
+  example?: string;
+  help_text?: string;
+  unit?: string;
+  supplemental_text?: string;
+  default_value?: ScalarValue;
   autocomplete?: string;
   input_mode?: 'text' | 'email' | 'tel' | 'numeric' | 'decimal';
   required: boolean;
@@ -81,10 +100,16 @@ export interface FieldDefinition {
   options?: FieldOption[];
 }
 
+export interface FieldGroupDefinition {
+  group_id: string;
+  label: string;
+  field_ids: string[];
+}
 export interface SectionDefinition {
   section_id: string;
   label: string;
   description?: string;
+  groups?: FieldGroupDefinition[];
   fields: FieldDefinition[];
 }
 
@@ -95,6 +120,15 @@ export interface NavigationDefinition {
   terminal?: boolean;
 }
 
+export interface ScenarioDefinition {
+  scenario_id: string;
+  name: string;
+  answers: Record<string, ScalarValue>;
+  expected?: {
+    visible_field_ids?: string[];
+  };
+}
+
 export interface FormDefinition {
   bank_id: string;
   product_id: string;
@@ -102,4 +136,6 @@ export interface FormDefinition {
   sections: SectionDefinition[];
   rules: RuleDefinition[];
   navigation: NavigationDefinition[];
+  scenarios?: ScenarioDefinition[];
+  open_questions?: string[];
 }

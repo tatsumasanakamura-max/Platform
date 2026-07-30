@@ -16,22 +16,27 @@ import {
   type ApplicationValues,
 } from '../features/application-form/ApplicationForm';
 import { toAnswers } from '../features/application-form/form-state';
+import { FormStudio } from '../features/form-studio/FormStudio';
 import { submitApplicationStub } from '../stubs/application-api';
 import styles from './App.module.css';
 
 type Screen = 'start' | 'personal' | 'confirmation' | 'complete';
-
 const definition = definitionJson as FormDefinition;
 const definitionIssues = validateFormDefinition(definition);
-if (definitionIssues.length > 0) {
+if (definitionIssues.length > 0)
   throw new Error(`Invalid bundled form definition: ${JSON.stringify(definitionIssues)}`);
+
+export function App() {
+  if (window.location.pathname.startsWith('/studio'))
+    return <FormStudio initialDefinition={definition} />;
+  return <ApplicationExperience />;
 }
 
 function isScreen(value: unknown): value is Screen {
   return ['start', 'personal', 'confirmation', 'complete'].includes(String(value));
 }
 
-export function App() {
+function ApplicationExperience() {
   const [screen, setScreen] = useState<Screen>('start');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const form = useForm<ApplicationValues>({
@@ -41,18 +46,11 @@ export function App() {
     shouldUnregister: false,
     defaultValues: {},
   });
-
   const personalSection = definition.sections.find((section) => section.section_id === 'personal');
   if (!personalSection) throw new Error('personal section is missing');
   const personalFields = personalSection.fields;
-
   const answers = toAnswers(form.getValues(), personalFields);
-  const payload = useMemo(
-    () => buildSubmissionPayload(definition, answers),
-    // screen changes are the points where the stable snapshot is needed.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [screen],
-  );
+  const payload = useMemo(() => buildSubmissionPayload(definition, answers), [screen]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     window.history.replaceState({ screen: 'start' }, '');
@@ -69,7 +67,6 @@ export function App() {
     setScreen(next);
     window.scrollTo({ top: 0, behavior: 'auto' });
   }
-
   async function submit() {
     if (isSubmitting) return;
     setIsSubmitting(true);
@@ -82,7 +79,6 @@ export function App() {
       setIsSubmitting(false);
     }
   }
-
   function restart() {
     form.reset();
     navigate('start', true);
@@ -94,7 +90,6 @@ export function App() {
       <main className={styles.main}>
         <div className={styles.shell}>
           <DemoNotice />
-
           {screen === 'start' && (
             <section className={styles.introCard}>
               <SectionHeading
@@ -110,9 +105,11 @@ export function App() {
               <PrimaryButton onPress={() => navigate('personal')}>
                 内容を理解してデモを始める
               </PrimaryButton>
+              <a className={styles.studioLink} href="/studio">
+                フォーム要件定義スタジオを開く
+              </a>
             </section>
           )}
-
           {screen === 'personal' && (
             <>
               <ProgressHeader current={1} total={6} label="本人情報について" />
@@ -124,7 +121,6 @@ export function App() {
               />
             </>
           )}
-
           {screen === 'confirmation' && (
             <>
               <ProgressHeader current={5} total={6} label="入力内容の確認" />
@@ -148,7 +144,6 @@ export function App() {
               </div>
             </>
           )}
-
           {screen === 'complete' && (
             <>
               <ProgressHeader current={6} total={6} label="完了" />

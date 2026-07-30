@@ -73,3 +73,11 @@ Node.js 24とnpmを使用する。依存関係は`package-lock.json`から復元
 - [開発ワークフロー](docs/09_ai_development_workflow.md)
 - [コストチェックリスト](docs/cost_checklist.md)
 - [Worklogテンプレート](docs/worklogs/README.md)
+
+## FormStudio作業時の追加規則
+
+- Studioと申込画面は同じ`FormDefinition`、`RuntimeField`、rule、validatorを使用する。
+- 画面構造グループと条件依存ルールを同一属性へ混在させない。
+- ブラウザからリポジトリ、Firebase、申込者回答を永続化しない。
+- 複合条件は破壊せず読取専用にし、任意コード・任意正規表現を追加しない。
+- 詳細は[Studio概要](docs/form-studio/overview.md)を正とする。

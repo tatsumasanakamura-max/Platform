@@ -148,3 +148,7 @@ PoC-1では同一セクションで複数navigationルールが同時成立す�
 ## 版管理
 
 公開済みファイルを書き換えた場合は `form_version` を更新する。追跡はGitコミットと定義ハッシュで行う。PoC-2では2商品目、銀行別ブランド、APIマッピング、途中保存に必要な属性を追加する。
+
+## PoC-1B任意属性
+
+Studioは既存契約を重複定義せず、後方互換の任意属性として`ui_type`、`placeholder`、`example`、`help_text`、`unit`、`supplemental_text`、`default_value`、validatorの`message`、sectionの`groups[]`、ルート`scenarios[]`（最大2件）、`open_questions[]`を扱う。`ui_type`はtext/email/tel/number/date/radio/select/checkboxだけを許可する。構造グループと条件ルールの分離は[編集モデル](form-studio/editing-model.md)を参照する。

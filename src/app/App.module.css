@@ -51,3 +51,8 @@
     padding: var(--space-8);
   }
 }
+
+.studioLink {
+  text-align: center;
+  font-weight: 700;
+}

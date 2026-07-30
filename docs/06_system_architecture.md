@@ -50,3 +50,7 @@ PoC-1のクライアント検証は本番セキュリティではない。本番
 ## デプロイ方針
 
 通常開発はローカルViteとPlaywrightで行う。公開は人間が承認した主要な節目だけとし、[公開前チェック](deployment.md)を満たすまでFirebaseへデプロイしない。課金可能性のある構成変更はCodexだけで実施しない。
+
+## FormStudio
+
+`/studio`のStudioは静的SPA内で動作し、[Studioデータフロー](form-studio/data-flow.md)に従う。申込画面とStudioは`RuntimeField`、ルールエンジン、名前付きvalidatorを共有する。Draftはメモリ、仮想商品定義だけをlocalStorageへ保存し、Firestore、Functions、Authentication、Firebaseデプロイを追加しない。

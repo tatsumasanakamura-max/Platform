@@ -1,19 +1,18 @@
 import { useEffect } from 'react';
 import { Controller, type UseFormReturn } from 'react-hook-form';
-import type { Answers } from '../../domain/answers';
+import type { Answers, AnswerValue } from '../../domain/answers';
 import type { FieldDefinition, FormDefinition } from '../../domain/form-definition';
 import { evaluateValidationRules, isFieldRequired, isFieldVisible } from '../../domain/rule-engine';
 import { validateNamedList } from '../../domain/validators';
 import { getErrorMessage } from '../../messages/errors.ja';
 import { PrimaryButton, SecondaryButton } from '../../components/buttons/Buttons';
 import { ErrorSummary, type SummaryError } from '../../components/errors/ErrorSummary';
-import { RadioGroupField } from '../../components/fields/RadioGroupField';
-import { TextField } from '../../components/fields/TextField';
 import { SectionHeading } from '../../components/layout/SectionHeading';
+import { RuntimeField } from './RuntimeField';
 import { toAnswers, toFormName } from './form-state';
 import styles from './ApplicationForm.module.css';
 
-export type ApplicationValues = Record<string, string>;
+export type ApplicationValues = Record<string, AnswerValue>;
 
 interface ApplicationFormProps {
   definition: FormDefinition;
@@ -22,11 +21,8 @@ interface ApplicationFormProps {
   onBack: () => void;
 }
 
-function fieldType(field: FieldDefinition): 'text' | 'email' | 'tel' | 'date' {
-  if (field.type === 'date') return 'date';
-  if (field.input_mode === 'email') return 'email';
-  if (field.input_mode === 'tel') return 'tel';
-  return 'text';
+function isBlank(value: AnswerValue): boolean {
+  return value === undefined || value === null || value === '';
 }
 
 export function ApplicationForm({ definition, form, onValid, onBack }: ApplicationFormProps) {
@@ -43,6 +39,7 @@ export function ApplicationForm({ definition, form, onValid, onBack }: Applicati
         form.unregister(toFormName(field.field_id));
     }
   }, [answers, definition.rules, form, fields]);
+
   const summaryErrors: SummaryError[] = visibleFields.flatMap((field) => {
     const error = form.formState.errors[toFormName(field.field_id)];
     return typeof error?.message === 'string'
@@ -50,13 +47,18 @@ export function ApplicationForm({ definition, form, onValid, onBack }: Applicati
       : [];
   });
 
-  function validateField(field: FieldDefinition, value: string): true | string {
+  function validateField(field: FieldDefinition, value: AnswerValue): true | string {
     const currentAnswers = toAnswers(form.getValues(), fields);
-    if (isFieldRequired(field, definition.rules, currentAnswers) && value.trim() === '') {
+    if (isFieldRequired(field, definition.rules, currentAnswers) && isBlank(value)) {
       return `${field.label}を入力してください`;
     }
     const namedResult = validateNamedList(value, field.validators);
-    if (!namedResult.valid) return getErrorMessage(namedResult.errorCode);
+    if (!namedResult.valid) {
+      return (
+        field.validators?.find((validator) => validator.error_code === namedResult.errorCode)
+          ?.message ?? getErrorMessage(namedResult.errorCode)
+      );
+    }
     const ruleErrors = evaluateValidationRules(field, definition.rules, currentAnswers);
     return ruleErrors.length > 0 ? getErrorMessage(ruleErrors[0]) : true;
   }
@@ -77,46 +79,24 @@ export function ApplicationForm({ definition, form, onValid, onBack }: Applicati
         {visibleFields.map((field) => {
           const isRequired = isFieldRequired(field, definition.rules, answers);
           const error = form.formState.errors[toFormName(field.field_id)]?.message;
-
           return (
             <Controller
               key={field.field_id}
               name={toFormName(field.field_id)}
               control={form.control}
-              defaultValue=""
+              defaultValue={field.default_value ?? (resolveCheckbox(field) ? false : '')}
               rules={{ validate: (value) => validateField(field, value) }}
-              render={({ field: controller }) =>
-                field.type === 'enum' ? (
-                  <RadioGroupField
-                    name={field.field_id}
-                    label={field.label}
-                    description={field.description}
-                    options={field.options ?? []}
-                    value={controller.value}
-                    onChange={controller.onChange}
-                    onBlur={controller.onBlur}
-                    isRequired={isRequired}
-                    isInvalid={Boolean(error)}
-                    error={typeof error === 'string' ? error : undefined}
-                  />
-                ) : (
-                  <TextField
-                    name={field.field_id}
-                    label={field.label}
-                    description={field.description}
-                    value={controller.value}
-                    onChange={controller.onChange}
-                    onBlur={controller.onBlur}
-                    inputRef={controller.ref}
-                    type={fieldType(field)}
-                    inputMode={field.input_mode}
-                    autoComplete={field.autocomplete}
-                    isRequired={isRequired}
-                    isInvalid={Boolean(error)}
-                    error={typeof error === 'string' ? error : undefined}
-                  />
-                )
-              }
+              render={({ field: controller }) => (
+                <RuntimeField
+                  field={field}
+                  value={controller.value}
+                  onChange={controller.onChange}
+                  onBlur={controller.onBlur}
+                  inputRef={controller.ref}
+                  isRequired={isRequired}
+                  error={typeof error === 'string' ? error : undefined}
+                />
+              )}
             />
           );
         })}
@@ -130,4 +110,8 @@ export function ApplicationForm({ definition, form, onValid, onBack }: Applicati
       </div>
     </form>
   );
+}
+
+function resolveCheckbox(field: FieldDefinition): boolean {
+  return field.ui_type === 'checkbox' || (!field.ui_type && field.type === 'boolean');
 }

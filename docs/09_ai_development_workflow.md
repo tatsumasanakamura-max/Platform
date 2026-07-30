@@ -17,13 +17,13 @@ flowchart TD
 
 ## 最低ゲート
 
-| ID | 検査 | 失敗時 |
-|---|---|---|
-| GATE-01 | JSON Schema、型、参照 | 修正して再実行 |
-| GATE-02 | ルールUnit・代表経路 | 修正して再実行 |
-| GATE-03 | UI E2E・build | 公開しない |
-| GATE-04 | secret・合成データ・本番利用不可表示 | 公開しない |
-| GATE-05 | Git差分と文書リンク | コミット前に修正 |
+| ID      | 検査                                 | 失敗時           |
+| ------- | ------------------------------------ | ---------------- |
+| GATE-01 | JSON Schema、型、参照                | 修正して再実行   |
+| GATE-02 | ルールUnit・代表経路                 | 修正して再実行   |
+| GATE-03 | UI E2E・build                        | 公開しない       |
+| GATE-04 | secret・合成データ・本番利用不可表示 | 公開しない       |
+| GATE-05 | Git差分と文書リンク                  | コミット前に修正 |
 
 企業向け多人数承認や公開システムは作らない。課金可能性のあるサービス追加とFirebaseデプロイは人間が最終判断する。
 
@@ -46,3 +46,7 @@ flowchart TD
 ## デプロイ方針
 
 日常の小変更ではクラウドへデプロイしない。ローカルとEmulator Suiteで確認し、PoC-1縦切り完成、主要変更シナリオ、スマホ実機確認、最終デモの節目だけFirebase Hostingへ公開する。
+
+## StudioからCodexへ渡す入力
+
+Studioの`form-definition.json`を正とし、`change-manifest.json`、項目・validator・rule・未解決事項のMarkdown、`scenarios.json`を同時レビューする。形式は[Studio出力形式](form-studio/export-format.md)を参照する。Codexは既存ランタイムで表現できない項目形式や機能だけをコード変更候補とする。
